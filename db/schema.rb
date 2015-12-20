@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151220013507) do
+ActiveRecord::Schema.define(version: 20151220014752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admins", force: :cascade do |t|
+    t.string "name",     null: false
+    t.string "email",    null: false
+    t.string "password", null: false
+  end
+
+  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
+  add_index "admins", ["name"], name: "index_admins_on_name", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.string   "first_name",                 null: false
@@ -58,13 +67,14 @@ ActiveRecord::Schema.define(version: 20151220013507) do
   add_index "schools", ["region_id"], name: "index_schools_on_region_id", using: :btree
 
   create_table "sessions", force: :cascade do |t|
-    t.integer  "contact_id",    null: false
-    t.string   "session_token", null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "sessionable_id",   null: false
+    t.string   "session_token",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "sessionable_type"
   end
 
-  add_index "sessions", ["contact_id"], name: "index_sessions_on_contact_id", using: :btree
   add_index "sessions", ["session_token"], name: "index_sessions_on_session_token", unique: true, using: :btree
+  add_index "sessions", ["sessionable_id", "sessionable_type"], name: "index_sessions_on_sessionable_id_and_sessionable_type", using: :btree
 
 end

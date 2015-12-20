@@ -1,6 +1,6 @@
 class Contact < ActiveRecord::Base
   belongs_to :school
-  has_many :sessions
+  has_many :sessions, as: :sessionable
 
   scope :current, -> { where(current: true) }
 
