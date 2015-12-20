@@ -3,4 +3,9 @@ class Contact < ActiveRecord::Base
   has_many :sessions
 
   scope :current, -> { where(current: true) }
+
+  validates :first_name, :last_name, :email, :title,
+            :current, :school_id, presence: true
+
+  validates :email, uniqueness: true
 end
